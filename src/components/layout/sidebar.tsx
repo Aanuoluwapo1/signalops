@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
-import { Shield, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { MAIN_NAV_ITEMS } from './nav-config'
+import { SignalOpsLogo } from '@/components/shared/signalops-logo'
 import { useUIStore } from '@/stores/use-ui-store'
 import { cn } from '@/lib/utils'
 
@@ -15,24 +16,12 @@ export function Sidebar() {
       )}
     >
       {/* Brand & Logo */}
-      <div className="h-14 flex items-center px-4 border-b border-[#141f33] justify-between">
+      <div className="h-14 flex items-center px-3.5 border-b border-[#141f33] justify-between">
         <NavLink
           to="/dashboard"
-          className="flex items-center gap-2.5 overflow-hidden focus:outline-none"
+          className="flex items-center gap-2 overflow-hidden focus:outline-none group"
         >
-          <div className="h-8 w-8 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center shrink-0 shadow-sm shadow-cyan-950">
-            <Shield className="h-4 w-4 text-cyan-400" />
-          </div>
-          {!isSidebarCollapsed && (
-            <div className="flex flex-col leading-none">
-              <span className="font-bold text-sm tracking-wide text-white">
-                SIGNAL<span className="text-cyan-400">OPS</span>
-              </span>
-              <span className="text-[9px] font-mono tracking-widest text-slate-500 uppercase mt-0.5">
-                SOC PLATFORM
-              </span>
-            </div>
-          )}
+          <SignalOpsLogo collapsed={isSidebarCollapsed} markSize={30} />
         </NavLink>
       </div>
 
