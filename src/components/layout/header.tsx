@@ -3,6 +3,7 @@ import { Breadcrumbs } from './breadcrumbs'
 import { NotificationsPopover } from './notifications-popover'
 import { AnalystMenu } from './analyst-menu'
 import { SyntheticBadge } from '@/components/shared/synthetic-badge'
+import { BackendBadge } from '@/components/shared/backend-badge'
 import { useUIStore } from '@/stores/use-ui-store'
 
 export function Header() {
@@ -24,8 +25,11 @@ export function Header() {
         <Breadcrumbs />
       </div>
 
-      {/* Center / Right: Synthetic Badge, Search, Notifications, Analyst */}
+      {/* Center / Right: Badges, Search, Notifications, Analyst */}
       <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
+        {/* Backend Database Status Badge */}
+        <BackendBadge />
+
         {/* Synthetic SOC Indicator */}
         <div className="hidden lg:block">
           <SyntheticBadge />

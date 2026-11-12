@@ -266,7 +266,58 @@ resolve: {
 
 ---
 
-## 6. Build, Lint & Verification Lifecycle
+## 6. Full-Stack Backend Architecture & Persistence Layer
+
+SignalOps incorporates a dedicated, lightweight, high-performance REST API backend built on **Express 5** and **Node.js 26**, backed by an embedded **SQLite** database using Node's native `node:sqlite` standard library module.
+
+```
++-----------------------------------------------------------------------------------+
+|                        Client Layer (React 19 + TypeScript)                      |
+|  - TanStack Query v5 & Zustand Stores                                             |
+|  - BackendBadge (Active DB Health Monitoring at /api/health)                      |
+|  - Vite Proxy: Transparent rewrite of /api requests to localhost:3001            |
++-----------------------------------------+-----------------------------------------+
+                                          | HTTP / JSON REST Calls
+                                          ▼
++-----------------------------------------------------------------------------------+
+|                       Express 5 Server Layer (server/src)                         |
+|  - Global CORS & JSON Body Parser                                                 |
+|  - Timestamped Audit Request Logger                                               |
+|  - Modular Routers: alerts, incidents, endpoints, events, rules, kpi              |
+|  - Centralized Error Handling Middleware                                          |
++-----------------------------------------+-----------------------------------------+
+                                          | Prepared Statements (DatabaseSync)
+                                          ▼
++-----------------------------------------------------------------------------------+
+|                   Embedded SQLite Database (data/signalops.db)                    |
+|  - PRAGMA journal_mode = WAL (Write-Ahead Logging for concurrent throughput)      |
+|  - PRAGMA foreign_keys = ON (Cascade deletes on incident notes & assets)          |
+|  - Tables: alerts, incidents, incident_assets, incident_notes, endpoints, events  |
++-----------------------------------------------------------------------------------+
+```
+
+### Relational Database Schema & Entities
+
+The relational database enforces data integrity through foreign keys and composite keys:
+
+1. **`alerts` Table**: Primary operational telemetry store. Indexed on `severity`, `status`, and `timestamp` for sub-millisecond query performance.
+2. **`incidents` Table**: Central incident response dossiers tracking `assigned_analyst`, `status` (*Triage* → *Containment* → *Eradication* → *Resolved*), and timestamps.
+3. **`incident_assets` Table**: Maps affected hostnames and IPs to overarching incidents, with an `is_isolated` flag for active quarantine management.
+4. **`incident_linked_alerts` Table**: Relational junction table linking multi-stage attack alerts directly into incident dossiers with `ON DELETE CASCADE`.
+5. **`incident_notes` Table**: Audit-trailed chronological investigation notes with immutable author signatures.
+6. **`endpoints` Table**: Inventory of enterprise workstations, servers, and domain controllers, tracking vulnerability counts and agent status.
+7. **`events` Table**: High-volume SIEM log stream capturing Windows Event IDs (4624, 4625, 4688) and Sysmon logs (1, 3, 10).
+8. **`detection_rules` Table**: Active Sigma detection rules with toggles and false-positive metrics.
+
+### Dual-Mode Resilient Client Architecture
+
+SignalOps implements a **graceful degradation architecture**:
+- **Connected Mode**: When the backend server is running (`npm run server`), the React frontend automatically reads and writes persistent records directly to the SQLite database.
+- **Standalone / Demo Mode**: If the backend is offline, the frontend seamlessly degrades to in-memory Zustand simulation stores, ensuring recruiters or reviewers can always test the UI without encountering broken pages.
+
+---
+
+## 7. Build, Lint & Verification Lifecycle
 
 The platform enforces zero tolerance for build warnings, type errors, or lint discrepancies.
 

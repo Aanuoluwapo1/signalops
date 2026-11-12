@@ -11,6 +11,12 @@ node_modules
 dist
 dist-ssr
 *.local
+data/*
+!data/.gitkeep
+*.sqlite
+*.db
+*.db-wal
+*.db-shm
 
 # Editor directories and files
 .vscode/*
