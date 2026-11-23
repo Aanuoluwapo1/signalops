@@ -2,6 +2,10 @@
 
 > **Next-Generation Full-Stack Cyber Threat Triage, Incident Response & Telemetry Platform**
 
+**Live Application:** [https://signalops-iota.vercel.app](https://signalops-iota.vercel.app) *(Alternate: [https://signalops-dra-e50e.vercel.app](https://signalops-dra-e50e.vercel.app))*
+
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel&logoColor=white)](https://signalops-iota.vercel.app)
+
 [![React 19](https://img.shields.io/badge/React-19.2-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript 6](https://img.shields.io/badge/TypeScript-6.0-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js 26](https://img.shields.io/badge/Node.js-26.13-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
