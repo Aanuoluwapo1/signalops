@@ -1,6 +1,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import {
   SEED_ALERTS,
   SEED_INCIDENTS,
@@ -24,7 +25,10 @@ import type {
   EndpointAgentStatus,
 } from './types.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+const DATA_DIR = process.env.VERCEL
+  ? path.join(os.tmpdir(), 'signalops')
+  : path.resolve(process.cwd(), 'data');
+
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
